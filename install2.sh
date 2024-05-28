@@ -246,7 +246,7 @@ count_conf=$1
 	echo "${GREEN}Upload Files to Get Link${RESET}"
 	echo "------------------------------------------------------------"
 	echo "Your link:"
-	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1#'
+	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1?download=1#'
 	echo "------------------------------------------------------------"
 	echo ""
 	mv warp.json warp_$(date +"%Y%m%d_%H%M%S").json
@@ -277,7 +277,7 @@ process_no_result_csv() {
   
 		new_json='{
 	      "type": "wireguard",
-	      "tag": "Warp-IR'"${i-1}"' | $value_to_add",
+	      "tag": "\ud83c\udf10Web_'"${i-1}"' | ${value_to_add}",
 	      "server": "engage.cloudflareclient.com",
 	      "server_port": 2408,
 	
@@ -294,8 +294,8 @@ process_no_result_csv() {
 	    },
 	    {
 	      "type": "wireguard",
-	      "tag": "Warp-Main'"${i-1}"' | $value_to_add",
-	      "detour": "Warp-IR'"${i-1}"' | $value_to_add",
+	      "tag": "\ud83c\udfaeGame_'"${i-1}"' | ${value_to_add}",
+	      "detour": "\ud83c\udf10Web_'"${i-1}"' | ${value_to_add}",
 	      "server": "engage.cloudflareclient.com",
 	      "server_port": 2408,
 	      
@@ -332,7 +332,7 @@ process_no_result_csv() {
 	echo "${GREEN}Upload Files to Get Link${RESET}"
 	echo "------------------------------------------------------------"
 	echo "Your link:"
-	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1#'
+	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1?download=1#'
 	echo "------------------------------------------------------------"
 	echo ""
 	mv warp.json warp_$(date +"%Y%m%d_%H%M%S").json
