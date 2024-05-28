@@ -35,6 +35,14 @@ cfwarpIP(){
 
 endipv4(){
 	subnets=(
+ 		"162.159.192."
+		"162.159.193."
+  		"162.159.195."
+		"188.114.96."
+  		"188.114.97."
+		"188.114.98."
+  		"188.114.99."
+   
 		"104.28.37."
 		"104.28.51."
 		"104.28.80."
@@ -193,7 +201,7 @@ count_conf=$1
   		
 		new_json='{
 	      "type": "wireguard",
-	      "tag": "\ud83c\udf10Web_'"${i-1}"' | $value_to_add",
+	      "tag": "\ud83c\udf10Web_'$((i - 1))' | $value_to_add",
 	      "server": "'"$ip"'",
 	      "server_port": '"$port"',
 	
@@ -210,8 +218,8 @@ count_conf=$1
 	    },
 	    {
 	      "type": "wireguard",
-	      "tag": "\ud83c\udfaeGame_'"${i-1}"' | $value_to_add",
-	      "detour": "\ud83c\udf10Web_'"${i-1}"' | $value_to_add",
+	      "tag": "\ud83c\udfaeGame_'$((i - 1))' | $value_to_add",
+	      "detour": "\ud83c\udf10Web_'$((i - 1))' | $value_to_add",
 	      "server": "'"$ip"'",
 	      "server_port": '"$port"',
 	      
@@ -279,7 +287,7 @@ process_no_result_csv() {
   
 		new_json='{
 	      "type": "wireguard",
-	      "tag": "\ud83c\udf10Web_'"${i-1}"' | ${value_to_add}",
+	      "tag": "\ud83c\udf10Web_'$((i - 1))' | ${value_to_add}",
 	      "server": "engage.cloudflareclient.com",
 	      "server_port": 2408,
 	
@@ -296,8 +304,8 @@ process_no_result_csv() {
 	    },
 	    {
 	      "type": "wireguard",
-	      "tag": "\ud83c\udfaeGame_'"${i-1}"' | ${value_to_add}",
-	      "detour": "\ud83c\udf10Web_'"${i-1}"' | ${value_to_add}",
+	      "tag": "\ud83c\udfaeGame_'$((i - 1))' | ${value_to_add}",
+	      "detour": "\ud83c\udf10Web_'$((i - 1))' | ${value_to_add}",
 	      "server": "engage.cloudflareclient.com",
 	      "server_port": 2408,
 	      
