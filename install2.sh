@@ -333,7 +333,7 @@ if [ "$option" = "1" ]; then
 	echo "How many configurations do you need?"
 read -r -p "Number of required configurations(suggested 5 or 10):  " number_of_configs
 cfwarpIP
-endipv4
+# endipv4
 endipresult $number_of_configs
 elif [ "$option" = "2" ]; then
 	read -r -p "Number of required configurations(suggested 5 or 10):  " number_of_configs
