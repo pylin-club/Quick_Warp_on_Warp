@@ -358,9 +358,9 @@ menu(){
 			cfwarpIP
 			endipv4 $number_of_ips
 			endipresult $number_of_configs
-   		else
-     		process_result_csv $number_of_configs
-   		fi
+		else
+			process_no_result_csv $number_of_configs
+		fi
 	elif [ "$option" = "2" ]; then
 		read -r -p "Number of configurations(e.g. 10): " number_of_configs
 		process_result_csv $number_of_configs
