@@ -142,6 +142,8 @@ get_values() {
     local private_key=$(echo "$api_output" | grep -oE '"private_key":"[0-9a-zA-Z\/+]+=+"' | sed 's/"private_key":"//; s/"//')
     local public_key=$(echo "$api_output" | grep -oE '"peer_public_key":"[0-9a-zA-Z\/+]+=+"' | sed 's/"peer_public_key":"//; s/"//')
     local reserved=$(echo "$api_output" | grep -oE '"reserved":\[[0-9]+(,[0-9]+){2}\]' | sed 's/"reserved"://; s/\[//; s/\]//')
+
+    echo "$ipv6@$private_key@$public_key@$reserved"
 }
 
 process_result_csv() {
@@ -246,7 +248,7 @@ count_conf=$1
 	echo "${GREEN}Upload Files to Get Link${RESET}"
 	echo "------------------------------------------------------------"
 	echo "Your link:"
-	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1?download=1#'
+	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1#'
 	echo "------------------------------------------------------------"
 	echo ""
 	mv warp.json warp_$(date +"%Y%m%d_%H%M%S").json
@@ -332,7 +334,7 @@ process_no_result_csv() {
 	echo "${GREEN}Upload Files to Get Link${RESET}"
 	echo "------------------------------------------------------------"
 	echo "Your link:"
-	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1?download=1#'
+	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1#'
 	echo "------------------------------------------------------------"
 	echo ""
 	mv warp.json warp_$(date +"%Y%m%d_%H%M%S").json
