@@ -7,51 +7,49 @@ CYAN=$(tput setaf 6)
 RED=$(tput setaf 1)
 RESET=$(tput sgr0)
 
-get_values() {
-
-    local api_output=$(curl -sL "https://api.zeroteam.top/warp?format=sing-box")
-    
-    local ipv6=$(echo "$api_output" | grep -oE '"2606:4700:[0-9a-f:]+/128"' | sed 's/"//g')
-    local private_key=$(echo "$api_output" | grep -oE '"private_key":"[0-9a-zA-Z\/+]+=+"' | sed 's/"private_key":"//; s/"//')
-    local public_key=$(echo "$api_output" | grep -oE '"peer_public_key":"[0-9a-zA-Z\/+]+=+"' | sed 's/"peer_public_key":"//; s/"//')
-    local reserved=$(echo "$api_output" | grep -oE '"reserved":\[[0-9]+(,[0-9]+){2}\]' | sed 's/"reserved"://; s/\[//; s/\]//')
-    
-
-    echo "$ipv6@$private_key@$public_key@$reserved"
-}
-
 case "$(uname -m)" in
 	x86_64 | x64 | amd64 )
-	    cpu=amd64
+		cpu=amd64
 	;;
 	i386 | i686 )
-        cpu=386
+		cpu=386
 	;;
 	armv8 | armv8l | arm64 | aarch64 )
-        cpu=arm64
+		cpu=arm64
 	;;
 	armv7l )
-        cpu=arm
+		cpu=arm
 	;;
 	* )
-	echo "The current architecture is $(uname -m), temporarily not supported"
-	exit
+		echo "The current architecture is $(uname -m), temporarily not supported"
+		exit
 	;;
 esac
 
 cfwarpIP(){
-echo "download warp endpoint file base on your CPU architecture"
-if [[ -n $cpu ]]; then
-curl -L -o warpendpoint -# --retry 2 https://raw.githubusercontent.com/azavaxhuman/Quick_Warp_on_Warp/main/cpu/$cpu
-fi
+	echo "download warp endpoint file base on your CPU architecture"
+	if [[ -n $cpu ]]; then
+		curl -L -o warpendpoint -# --retry 2 https://raw.githubusercontent.com/pylin-club/Quick_Warp_on_Warp/main/cpu/$cpu
+	fi
 }
 
 endipv4(){
+	subnets=(
+        "104.28.37."
+        "104.28.51."
+        "104.28.80."
+        "104.28.106."
+        "104.28.131."
+        "172.68.30."
+        "172.68.75."
+		"172.71.12."
+  		"172.69.228."
+		"172.71.228."
+    )
+	iplist=$1
 	n=0
-	# iplist=100
- 	
- 	# for (( n=0; n<$total_ips; n++ )); do
-	for counter in $(seq 0 1); do
+ 	flag=""
+	# for counter in $(seq 0 255); do
 		# temp[$n]=$(echo 162.159.192.$(counter))
   # 		n=$[$n+1]
   #   		temp[$n]=$(echo 162.159.193.$(counter))
@@ -67,142 +65,166 @@ endipv4(){
   #     		temp[$n]=$(echo 188.114.99.$(counter))
 		# n=$[$n+1]
 
-		temp[$n]=$(echo 190.93.241.$counter)
-  		n=$[$n+1]
-    		temp[$n]=$(echo 190.93.242.$counter)
-      		n=$[$n+1]
-		temp[$n]=$(echo 190.93.243.$counter)
-  		n=$[$n+1]
-  		temp[$n]=$(echo 197.234.241.$counter)
-    		n=$[$n+1]
-      		temp[$n]=$(echo 197.234.242.$counter)
-		n=$[$n+1]
-    		temp[$n]=$(echo 197.234.243.$counter)
-      		n=$[$n+1]
-      		temp[$n]=$(echo 131.0.73.0.$counter)
-		n=$[$n+1]
-        	temp[$n]=$(echo 131.0.74.0.$counter)
-		n=$[$n+1]
-        	temp[$n]=$(echo 131.0.75.0.$counter)
-		n=$[$n+1]
- 	done
+		# temp[$n]=$(echo 190.93.241.$counter)
+  # 		n=$[$n+1]
+  #   		temp[$n]=$(echo 190.93.242.$counter)
+  #     		n=$[$n+1]
+		# temp[$n]=$(echo 190.93.243.$counter)
+  # 		n=$[$n+1]
+  # 		temp[$n]=$(echo 197.234.241.$counter)
+  #   		n=$[$n+1]
+  #     		temp[$n]=$(echo 197.234.242.$counter)
+		# n=$[$n+1]
+  #   		temp[$n]=$(echo 197.234.243.$counter)
+  #     		n=$[$n+1]
+  #     		temp[$n]=$(echo 131.0.73.0.$counter)
+		# n=$[$n+1]
+  #       	temp[$n]=$(echo 131.0.74.0.$counter)
+		# n=$[$n+1]
+  #       	temp[$n]=$(echo 131.0.75.0.$counter)
+		# n=$[$n+1]
+ 	# done
   
-	# while true
-	# do
-	# 	temp[$n]=$(echo 162.159.192.$(($RANDOM%256)))
-	# 	n=$[$n+1]
-	# 	if [ $n -ge $iplist ]
-	# 	then
-	# 		break
-	# 	fi
-	# 	temp[$n]=$(echo 162.159.193.$(($RANDOM%256)))
-	# 	n=$[$n+1]
-	# 	if [ $n -ge $iplist ]
-	# 	then
-	# 		break
-	# 	fi
-	# 	# temp[$n]=$(echo 162.159.195.$(($RANDOM%256)))
-	# 	n=$[$n+1]
-	# 	if [ $n -ge $iplist ]
-	# 	then
-	# 		break
-	# 	fi
-	# 	temp[$n]=$(echo 188.114.96.$(($RANDOM%256)))
-	# 	n=$[$n+1]
-	# 	if [ $n -ge $iplist ]
-	# 	then
-	# 		break
-	# 	fi
-	# 	temp[$n]=$(echo 188.114.97.$(($RANDOM%256)))
-	# 	n=$[$n+1]
-	# 	if [ $n -ge $iplist ]
-	# 	then
-	# 		break
-	# 	fi
-	# 	# temp[$n]=$(echo 188.114.98.$(($RANDOM%256)))
-	# 	n=$[$n+1]
-	# 	if [ $n -ge $iplist ]
-	# 	then
-	# 		break
-	# 	fi
-	# 	temp[$n]=$(echo 188.114.99.$(($RANDOM%256)))
-	# 	n=$[$n+1]
-	# 	if [ $n -ge $iplist ]
-	# 	then
-	# 		break
-	# 	fi
-	# done
-	# while true
-	# do
-	# 	if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-	# 	then
-	# 		break
-	# 	else
-	# 		temp[$n]=$(echo 162.159.192.$(($RANDOM%256)))
-	# 		n=$[$n+1]
-	# 	fi
-	# 	if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-	# 	then
-	# 		break
-	# 	else
-	# 		temp[$n]=$(echo 162.159.193.$(($RANDOM%256)))
-	# 		n=$[$n+1]
-	# 	fi
-	# 	if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-	# 	then
-	# 		break
-	# 	else
-	# 		temp[$n]=$(echo 162.159.195.$(($RANDOM%256)))
-	# 		n=$[$n+1]
-	# 	fi
-	# 	if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-	# 	then
-	# 		break
-	# 	else
-	# 		temp[$n]=$(echo 188.114.96.$(($RANDOM%256)))
-	# 		n=$[$n+1]
-	# 	fi
-	# 	if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-	# 	then
-	# 		break
-	# 	else
-	# 		temp[$n]=$(echo 188.114.97.$(($RANDOM%256)))
-	# 		n=$[$n+1]
-	# 	fi
-	# 	if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-	# 	then
-	# 		break
-	# 	else
-	# 		temp[$n]=$(echo 188.114.98.$(($RANDOM%256)))
-	# 		n=$[$n+1]
-	# 	fi
-	# 	if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-	# 	then
-	# 		break
-	# 	else
-	# 		temp[$n]=$(echo 188.114.99.$(($RANDOM%256)))
-	# 		n=$[$n+1]
-	# 	fi
-	# done
+	while true; do
+ 		for subnet in "${subnets[@]}"; do
+			temp[$n]=$(echo ${subnet}$(($RANDOM%256)))
+			n=$[$n+1]
+			if [ $n -ge $iplist ]
+			then
+   				flag=1
+				break
+			fi
+   		done
+	 
+   		if [ -n "$flag" ]; then
+	 		break
+		fi
+   
+			# temp[$n]=$(echo 162.159.193.$(($RANDOM%256)))
+			# n=$[$n+1]
+			# if [ $n -ge $iplist ]
+			# then
+			# 	break
+			# fi
+			# # temp[$n]=$(echo 162.159.195.$(($RANDOM%256)))
+			# n=$[$n+1]
+			# if [ $n -ge $iplist ]
+			# then
+			# 	break
+			# fi
+			# temp[$n]=$(echo 188.114.96.$(($RANDOM%256)))
+			# n=$[$n+1]
+			# if [ $n -ge $iplist ]
+			# then
+			# 	break
+			# fi
+			# temp[$n]=$(echo 188.114.97.$(($RANDOM%256)))
+			# n=$[$n+1]
+			# if [ $n -ge $iplist ]
+			# then
+			# 	break
+			# fi
+			# temp[$n]=$(echo 188.114.98.$(($RANDOM%256)))
+			# n=$[$n+1]
+			# if [ $n -ge $iplist ]
+			# then
+			# 	break
+			# fi
+			# temp[$n]=$(echo 188.114.99.$(($RANDOM%256)))
+			# n=$[$n+1]
+			# if [ $n -ge $iplist ]
+			# then
+			# 	break
+			# fi
+	done
+ 
+ 	flag=""
+	while true;	do
+		for subnet in "${subnets[@]}"; do
+			if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+			then
+   				flag=1
+				break
+			else
+				temp[$n]=$(echo ${subnet}$(($RANDOM%256)))
+				n=$[$n+1]
+			fi
+   		done
+	 
+	 	if [ -n "$flag" ]; then
+	 		break
+		fi
+
+  
+		# if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		# then
+		# 	break
+		# else
+		# 	temp[$n]=$(echo 162.159.193.$(($RANDOM%256)))
+		# 	n=$[$n+1]
+		# fi
+		# if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		# then
+		# 	break
+		# else
+		# 	temp[$n]=$(echo 162.159.195.$(($RANDOM%256)))
+		# 	n=$[$n+1]
+		# fi
+		# if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		# then
+		# 	break
+		# else
+		# 	temp[$n]=$(echo 188.114.96.$(($RANDOM%256)))
+		# 	n=$[$n+1]
+		# fi
+		# if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		# then
+		# 	break
+		# else
+		# 	temp[$n]=$(echo 188.114.97.$(($RANDOM%256)))
+		# 	n=$[$n+1]
+		# fi
+		# if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		# then
+		# 	break
+		# else
+		# 	temp[$n]=$(echo 188.114.98.$(($RANDOM%256)))
+		# 	n=$[$n+1]
+		# fi
+		# if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		# then
+		# 	break
+		# else
+		# 	temp[$n]=$(echo 188.114.99.$(($RANDOM%256)))
+		# 	n=$[$n+1]
+		# fi
+	done
 }
 
 
 endipresult(){
-temp_var=$1
-echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u > ip.txt
-ulimit -n 102400
-chmod +x warpendpoint
-./warpendpoint
-clear
-echo "${GREEN}successfully generated ipv4 endip list${RESET}"
-echo "${GREEN}successfully create result.csv file${RESET}"
-echo "${CYAN}Now we're going to process result.csv${RESET}"
-process_result_csv $temp_var
-rm -rf ip.txt warpendpoint result.csv
-exit
+	temp_var=$1
+	echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u > ip.txt
+	ulimit -n 102400
+	chmod +x warpendpoint
+	./warpendpoint
+	clear
+	echo "${GREEN}successfully generated ipv4 endip list${RESET}"
+	echo "${GREEN}successfully create result.csv file${RESET}"
+	echo "${CYAN}Now we're going to process result.csv${RESET}"
+	process_result_csv $temp_var
+	rm -rf ip.txt warpendpoint result.csv
+	exit
 }
 
-
+get_values() {
+    local api_output=$(curl -sL "https://api.zeroteam.top/warp?format=sing-box")
+    local ipv6=$(echo "$api_output" | grep -oE '"2606:4700:[0-9a-f:]+/128"' | sed 's/"//g')
+    local private_key=$(echo "$api_output" | grep -oE '"private_key":"[0-9a-zA-Z\/+]+=+"' | sed 's/"private_key":"//; s/"//')
+    local public_key=$(echo "$api_output" | grep -oE '"peer_public_key":"[0-9a-zA-Z\/+]+=+"' | sed 's/"peer_public_key":"//; s/"//')
+    local reserved=$(echo "$api_output" | grep -oE '"reserved":\[[0-9]+(,[0-9]+){2}\]' | sed 's/"reserved"://; s/\[//; s/\]//')
+    # echo "$ipv6@$private_key@$public_key@$reserved"
+}
 
 process_result_csv() {
 count_conf=$1
@@ -303,48 +325,32 @@ curl https://bashupload.com/ -T output.json | sed -e 's#wget#Your Link#' -e 's#h
 echo "------------------------------------------------------------"
 echo ""
 mv output.json output_$(date +"%Y%m%d_%H%M%S").json
-
 }
+
 menu(){
-clear
-echo ""
-echo ""
-echo ""
-echo ""
-echo ""
-echo "--------------- DDS-WOW -----------------------------"
-echo ""
-echo "DailyDigitalSkills  ：github.com/azavaxhuman"
-echo "Youtube  ：youtube.com/DailyDigitalSkills"
-echo ""
-echo ""
-echo ""
-echo "---------------Credits-----------------------------"
-echo ""
-echo "Yonggekkk  ：github.com/yonggekkk"
-echo "Elfina Tech  : github.com/Elfiinaa"
-echo "Elfina Tech(YT)  : youtube.com/@ElfinaTech"
-echo ""
-echo ""
-echo "Welcome to DDS-WOW(WARP on Warp)"
-echo "1.Automatic scanning and execution (Android / Linux)"
-echo "2.Import custom IPs with result.csv file (windows)"
-read -r -p "Please choose an option: " option
-if [ "$option" = "1" ]; then
-	echo "How many configurations do you need?"
-read -r -p "Number of required configurations(suggested 5 or 10):  " number_of_configs
-cfwarpIP
-# endipv4
-endipresult $number_of_configs
-elif [ "$option" = "2" ]; then
-	read -r -p "Number of required configurations(suggested 5 or 10):  " number_of_configs
-	process_result_csv $number_of_configs
-else
-	echo "Invalid option"
-fi
+	clear
+	echo "---------------Credits-----------------------------"
+	echo ""
+	echo "Yonggekkk  ：github.com/yonggekkk"
+	echo "Elfina Tech  : github.com/Elfiinaa"
+	echo "Elfina Tech(YT)  : youtube.com/@ElfinaTech"
+	echo "------------------------------------------------------------"
+	echo "1.Automatic scanning and execution (Android / Linux)"
+	echo "2.Import custom IPs with result.csv file (windows)"
+	read -r -p "Please choose an option: " option
 
-
-
+	if [ "$option" = "1" ]; then
+ 		read -r -P "Number of IPs to scan (e.g. 100): " number_of_ips
+		read -r -p "Number of configurations (e.g. 10): " number_of_configs
+		cfwarpIP
+		endipv4 $number_of_ips
+		endipresult $number_of_configs
+	elif [ "$option" = "2" ]; then
+		read -r -p "Number of configurations(e.g. 10): " number_of_configs
+		process_result_csv $number_of_configs
+	else
+		echo "Invalid option"
+	fi
 }
 
 menu
