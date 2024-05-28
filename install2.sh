@@ -35,15 +35,15 @@ cfwarpIP(){
 
 endipv4(){
 	subnets=(
-        "104.28.37."
-        "104.28.51."
-        "104.28.80."
-        "104.28.106."
-        "104.28.131."
-        "172.68.30."
-        "172.68.75."
+		"104.28.37."
+		"104.28.51."
+		"104.28.80."
+		"104.28.106."
+		"104.28.131."
+		"172.68.30."
+		"172.68.75."
 		"172.71.12."
-  		"172.69.228."
+		"172.69.228."
 		"172.71.228."
     )
 	iplist=$1
@@ -354,7 +354,7 @@ menu(){
  		read -r -p "Number of IPs to scan (e.g. 100) [0 for engage.cloudflareclient.com:2408]: " number_of_ips
 		read -r -p "Number of configurations (e.g. 10): " number_of_configs
 
-    	if [ "$number_of_ips" -eq 0 ]; then
+    	if [ "$number_of_ips" -ne 0 ]; then
 			cfwarpIP
 			endipv4 $number_of_ips
 			endipresult $number_of_configs
