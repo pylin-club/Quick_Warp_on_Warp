@@ -254,7 +254,7 @@ count_conf=$1
 
 process_no_result_csv() {
 	count_conf=$1
-	for ((i=2; i<=$num_lines; i++)); do
+	for ((i=2; i<=$count_conf; i++)); do
 		echo "license $((i-1)), captured."
   
         values=$(get_values)
@@ -314,7 +314,7 @@ process_no_result_csv() {
 	    temp_json+="$new_json"
 	
 		# اضافه کردن خط خالی به محتوای متغیر موقت
-		if [ $i -lt $num_lines ]; then
+		if [ $i -lt $count_conf ]; then
 		    temp_json+=","
 		fi
 	done
