@@ -52,19 +52,38 @@ endipv4(){
  	
  	# for (( n=0; n<$total_ips; n++ )); do
 	for counter in $(seq 0 255); do
-		temp[$n]=$(echo 162.159.192.$(($RANDOM%256)))
+		# temp[$n]=$(echo 162.159.192.$(counter))
+  # 		n=$[$n+1]
+  #   		temp[$n]=$(echo 162.159.193.$(counter))
+  #     		n=$[$n+1]
+		# temp[$n]=$(echo 162.159.195.$(counter))
+  # 		n=$[$n+1]
+  # 		temp[$n]=$(echo 188.114.96.$(counter))
+  #   		n=$[$n+1]
+  #     		temp[$n]=$(echo 188.114.97.$(counter))
+		# n=$[$n+1]
+  #   		temp[$n]=$(echo 188.114.98.$(counter))
+  #     		n=$[$n+1]
+  #     		temp[$n]=$(echo 188.114.99.$(counter))
+		# n=$[$n+1]
+
+		temp[$n]=$(echo 190.93.241.$counter)
   		n=$[$n+1]
-    		temp[$n]=$(echo 162.159.193.$(($RANDOM%256)))
+    		temp[$n]=$(echo 190.93.242.$counter)
       		n=$[$n+1]
-		temp[$n]=$(echo 162.159.195.$(($RANDOM%256)))
+		temp[$n]=$(echo 190.93.243.$counter)
   		n=$[$n+1]
-  		temp[$n]=$(echo 188.114.96.$(($RANDOM%256)))
+  		temp[$n]=$(echo 197.234.241.$counter)
     		n=$[$n+1]
-      		temp[$n]=$(echo 188.114.97.$(($RANDOM%256)))
+      		temp[$n]=$(echo 197.234.242.$counter)
 		n=$[$n+1]
-    		temp[$n]=$(echo 188.114.98.$(($RANDOM%256)))
+    		temp[$n]=$(echo 197.234.243.$counter)
       		n=$[$n+1]
-      		temp[$n]=$(echo 188.114.99.$(($RANDOM%256)))
+      		temp[$n]=$(echo 131.0.73.0.$counter)
+		n=$[$n+1]
+        	temp[$n]=$(echo 131.0.74.0.$counter)
+		n=$[$n+1]
+        	temp[$n]=$(echo 131.0.75.0.$counter)
 		n=$[$n+1]
  	done
   
