@@ -253,8 +253,8 @@ count_conf=$1
 }
 
 process_no_result_csv() {
-count_conf=$1
-    for ((i=2; i<=$num_lines; i++)); do
+	count_conf=$1
+	for ((i=2; i<=$num_lines; i++)); do
 		echo "license $((i-1)), captured."
   
         values=$(get_values)
