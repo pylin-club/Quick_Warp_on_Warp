@@ -222,7 +222,7 @@ fi
 
     # برای هر سطر در result.csv دستورات را اجرا کنید
     for ((i=2; i<=$num_lines; i++)); do
-    	echo "num: $i, done."
+    	echo "num: ${i}, done."
         # اطلاعات مورد نیاز از هر سطر را دریافت کنید
         local line=$(sed -n "${i}p" ./result.csv)
         local endpoint=$(echo "$line" | awk -F',' '{print $1}')
