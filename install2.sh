@@ -99,43 +99,6 @@ endipv4(){
    		if [ -n "$flag" ]; then
 	 		break
 		fi
-   
-			# temp[$n]=$(echo 162.159.193.$(($RANDOM%256)))
-			# n=$[$n+1]
-			# if [ $n -ge $iplist ]
-			# then
-			# 	break
-			# fi
-			# # temp[$n]=$(echo 162.159.195.$(($RANDOM%256)))
-			# n=$[$n+1]
-			# if [ $n -ge $iplist ]
-			# then
-			# 	break
-			# fi
-			# temp[$n]=$(echo 188.114.96.$(($RANDOM%256)))
-			# n=$[$n+1]
-			# if [ $n -ge $iplist ]
-			# then
-			# 	break
-			# fi
-			# temp[$n]=$(echo 188.114.97.$(($RANDOM%256)))
-			# n=$[$n+1]
-			# if [ $n -ge $iplist ]
-			# then
-			# 	break
-			# fi
-			# temp[$n]=$(echo 188.114.98.$(($RANDOM%256)))
-			# n=$[$n+1]
-			# if [ $n -ge $iplist ]
-			# then
-			# 	break
-			# fi
-			# temp[$n]=$(echo 188.114.99.$(($RANDOM%256)))
-			# n=$[$n+1]
-			# if [ $n -ge $iplist ]
-			# then
-			# 	break
-			# fi
 	done
  
  	flag=""
@@ -154,50 +117,6 @@ endipv4(){
 	 	if [ -n "$flag" ]; then
 	 		break
 		fi
-
-  
-		# if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-		# then
-		# 	break
-		# else
-		# 	temp[$n]=$(echo 162.159.193.$(($RANDOM%256)))
-		# 	n=$[$n+1]
-		# fi
-		# if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-		# then
-		# 	break
-		# else
-		# 	temp[$n]=$(echo 162.159.195.$(($RANDOM%256)))
-		# 	n=$[$n+1]
-		# fi
-		# if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-		# then
-		# 	break
-		# else
-		# 	temp[$n]=$(echo 188.114.96.$(($RANDOM%256)))
-		# 	n=$[$n+1]
-		# fi
-		# if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-		# then
-		# 	break
-		# else
-		# 	temp[$n]=$(echo 188.114.97.$(($RANDOM%256)))
-		# 	n=$[$n+1]
-		# fi
-		# if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-		# then
-		# 	break
-		# else
-		# 	temp[$n]=$(echo 188.114.98.$(($RANDOM%256)))
-		# 	n=$[$n+1]
-		# fi
-		# if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-		# then
-		# 	break
-		# else
-		# 	temp[$n]=$(echo 188.114.99.$(($RANDOM%256)))
-		# 	n=$[$n+1]
-		# fi
 	done
 }
 
@@ -327,7 +246,7 @@ count_conf=$1
 	echo "${GREEN}Upload Files to Get Link${RESET}"
 	echo "------------------------------------------------------------"
 	echo "Your link:"
-	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1?download=1#'
+	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1#'
 	echo "------------------------------------------------------------"
 	echo ""
 	mv warp.json warp_$(date +"%Y%m%d_%H%M%S").json
@@ -413,7 +332,7 @@ count_conf=$1
 	echo "${GREEN}Upload Files to Get Link${RESET}"
 	echo "------------------------------------------------------------"
 	echo "Your link:"
-	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1?download=1#'
+	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1#'
 	echo "------------------------------------------------------------"
 	echo ""
 	mv warp.json warp_$(date +"%Y%m%d_%H%M%S").json
