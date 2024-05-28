@@ -340,7 +340,7 @@ menu(){
 	read -r -p "Please choose an option: " option
 
 	if [ "$option" = "1" ]; then
- 		read -r -P "Number of IPs to scan (e.g. 100): " number_of_ips
+ 		read -r -p "Number of IPs to scan (e.g. 100): " number_of_ips
 		read -r -p "Number of configurations (e.g. 10): " number_of_configs
 		cfwarpIP
 		endipv4 $number_of_ips
