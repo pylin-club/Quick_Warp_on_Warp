@@ -51,7 +51,7 @@ endipv4(){
 	# iplist=100
  	
  	# for (( n=0; n<$total_ips; n++ )); do
-	for counter in $(seq 0 255); do
+	for counter in $(seq 0 1); do
 		# temp[$n]=$(echo 162.159.192.$(counter))
   # 		n=$[$n+1]
   #   		temp[$n]=$(echo 162.159.193.$(counter))
@@ -208,7 +208,7 @@ process_result_csv() {
 count_conf=$1
 
     # تعداد سطرهای فایل result.csv را بدست آورید
-    num_lines=$(wc -l < ./result.csv)
+    num_lines=100 #$(wc -l < ./result.csv)
     echo ""
     echo "We have considered the number of ${num_lines} IPs."
     echo ""
