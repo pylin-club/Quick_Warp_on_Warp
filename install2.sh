@@ -245,37 +245,37 @@ count_conf=$1
 	fi
 
     # برای هر سطر در result.csv دستورات را اجرا کنید
-    for ((i=2; i<=$num_lines; i++)); do
-    	echo "license $((i-1)), captured."
-        # اطلاعات مورد نیاز از هر سطر را دریافت کنید
-        local line=$(sed -n "${i}p" ./result.csv)
-        local endpoint=$(echo "$line" | awk -F',' '{print $1}')
-        local ip=$(echo "$endpoint" | awk -F':' '{print $1}')
-        local port=$(echo "$endpoint" | awk -F':' '{print $2}')
-
-        values=$(get_values)
-        w_ip=$(echo "$values" | cut -d'@' -f1)
-        w_pv=$(echo "$values" | cut -d'@' -f2)
-        w_pb=$(echo "$values" | cut -d'@' -f3)
-        w_res=$(echo "$values" | cut -d'@' -f4)
-        
-        i_values=$(get_values)
-        i_w_ip=$(echo "$i_values" | cut -d'@' -f1)
-        i_w_pv=$(echo "$i_values" | cut -d'@' -f2)
-        i_w_pb=$(echo "$i_values" | cut -d'@' -f3)
-        i_w_res=$(echo "$i_values" | cut -d'@' -f4)
-
+	for ((i=2; i<=$num_lines; i++)); do
+		echo "license $((i-1)), captured."
+		# اطلاعات مورد نیاز از هر سطر را دریافت کنید
+		local line=$(sed -n "${i}p" ./result.csv)
+		local endpoint=$(echo "$line" | awk -F',' '{print $1}')
+		local ip=$(echo "$endpoint" | awk -F':' '{print $1}')
+		local port=$(echo "$endpoint" | awk -F':' '{print $2}')
+		
+		values=$(get_values)
+		w_ip=$(echo "$values" | cut -d'@' -f1)
+		w_pv=$(echo "$values" | cut -d'@' -f2)
+		w_pb=$(echo "$values" | cut -d'@' -f3)
+		w_res=$(echo "$values" | cut -d'@' -f4)
+		
+		i_values=$(get_values)
+		i_w_ip=$(echo "$i_values" | cut -d'@' -f1)
+		i_w_pv=$(echo "$i_values" | cut -d'@' -f2)
+		i_w_pb=$(echo "$i_values" | cut -d'@' -f3)
+		i_w_res=$(echo "$i_values" | cut -d'@' -f4)
+		
 		# ترکیب رشته و متغیرها در یک متغیر دیگر
-
-  		if [ $((i % 2)) -eq 0 ]; then
-		    value_to_add="@pylin_news"
+		
+		if [ $((i % 2)) -eq 0 ]; then
+			value_to_add="@pylin_news"
 		else
-		    value_to_add="@pylin_gap"
+			value_to_add="@pylin_gap"
 		fi
   		
 		new_json='{
 	      "type": "wireguard",
-	      "tag": "\ud83c\udf10Web_'$((i - 1))' | $value_to_add",
+	      "tag": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
 	      "server": "'"$ip"'",
 	      "server_port": '"$port"',
 	
@@ -292,8 +292,8 @@ count_conf=$1
 	    },
 	    {
 	      "type": "wireguard",
-	      "tag": "\ud83c\udfaeGame_'$((i - 1))' | $value_to_add",
-	      "detour": "\ud83c\udf10Web_'$((i - 1))' | $value_to_add",
+	      "tag": "\ud83c\udfaeGame_'$((i - 1))' | '$value_to_add'",
+	      "detour": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
 	      "server": "'"$ip"'",
 	      "server_port": '"$port"',
 	      
@@ -361,7 +361,7 @@ process_no_result_csv() {
   
 		new_json='{
 	      "type": "wireguard",
-	      "tag": "\ud83c\udf10Web_'$((i - 1))' | ${value_to_add}",
+	      "tag": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
 	      "server": "engage.cloudflareclient.com",
 	      "server_port": 2408,
 	
@@ -378,8 +378,8 @@ process_no_result_csv() {
 	    },
 	    {
 	      "type": "wireguard",
-	      "tag": "\ud83c\udfaeGame_'$((i - 1))' | ${value_to_add}",
-	      "detour": "\ud83c\udf10Web_'$((i - 1))' | ${value_to_add}",
+	      "tag": "\ud83c\udfaeGame_'$((i - 1))' | '$value_to_add'",
+	      "detour": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
 	      "server": "engage.cloudflareclient.com",
 	      "server_port": 2408,
 	      
