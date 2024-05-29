@@ -89,7 +89,7 @@ endipv4(){
 		"141.101.127."
 
 
-		temp  
+		# temp  
 		"8.6.144."
 		"8.9.231."
 		"8.10.148."
@@ -110,24 +110,24 @@ endipv4(){
     )
 
 	# Initialize an empty array for responsive IPs
- 	echo "------------------------------------------------------------"
-  	echo "ping ip pools (this might take some time!):"
-	responsive_ips=()
+ 	# echo "------------------------------------------------------------"
+  # 	echo "ping ip pools (this might take some time!):"
+	responsive_ips=${subnets[@]} #()
 	
 	# Check ping for each IP
-	for ip in "${subnets[@]}"; do
-	    if ping -c 1 "${ip}78" &> /dev/null; then
-	        # IP responds to ping
-	 	echo "${GREEN}IP: $ip, OK!${RESET}"
-	        responsive_ips+=("$ip")
-	    else
-	        # IP does not respond to ping
-	        echo "${RED}IP: $ip, does not ping and removed.${RESET}"
-	    fi
-	done
+	# for ip in "${subnets[@]}"; do
+	#     if ping -c 1 "${ip}78" &> /dev/null; then
+	#         # IP responds to ping
+	#  	echo "${GREEN}range: ${ip}0, OK!${RESET}"
+	#         responsive_ips+=("$ip")
+	#     else
+	#         # IP does not respond to ping
+	#         echo "${RED}range: ${ip}0, does not ping and removed.${RESET}"
+	#     fi
+	# done
 
-  	echo "Done! now let's scan $iplist ips"
-    	echo "------------------------------------------------------------"
+ #  	echo "Done! now let's scan $iplist ips"
+ #    	echo "------------------------------------------------------------"
      
 	n=0
  	flag=""
