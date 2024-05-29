@@ -74,9 +74,9 @@ endipv4(){
 
 		# Netherlands -> 141.101.64.0/18
   		"141.101.65."
-		"141.101.66."
-		"141.101.77."
-		"141.101.78."
+		"141.101.67."
+		"141.101.75."
+		"141.101.82."
   
 		"141.101.97."
 		"141.101.98."
@@ -115,7 +115,7 @@ endipv4(){
 	
 	# Check ping for each IP
 	for ip in "${subnets[@]}"; do
-	    if ping -c 1 "${ip}1" &> /dev/null; then
+	    if ping -c 1 "${ip}78" &> /dev/null; then
 	        # IP responds to ping
 	 	echo "${GREEN}IP: $ip, OK!${RESET}"
 	        responsive_ips+=("$ip")
