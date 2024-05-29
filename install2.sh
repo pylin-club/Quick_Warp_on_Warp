@@ -34,6 +34,8 @@ cfwarpIP(){
 }
 
 endipv4(){
+	iplist=$1
+ 
 	subnets=(
  		# Australia
 		# "162.159.192."
@@ -107,6 +109,8 @@ endipv4(){
     )
 
 	# Initialize an empty array for responsive IPs
+ 	echo "------------------------------------------------------------"
+  	echo "ping ip pools (this might take some time!):"
 	responsive_ips=()
 	
 	# Check ping for each IP
@@ -116,11 +120,13 @@ endipv4(){
 	        responsive_ips+=("$ip")
 	    else
 	        # IP does not respond to ping
-	        echo "IP $ip does not respond to ping. Removing from list."
+	        echo "IP: $ip, does not ping and removed."
 	    fi
 	done
-    
-	iplist=$1
+
+  	echo "Done! now let's scan $iplist ips"
+    	echo "------------------------------------------------------------"
+     
 	n=0
  	flag=""
 	# for counter in $(seq 0 255); do
