@@ -160,8 +160,8 @@ endipv4(){
  	# done
   
 	while true; do
- 		for subnet in "${subnets[@]}"; do
-			temp[$n]=$(echo ${subnet}$(($RANDOM%256)))
+ 		for ip in "${responsive_ips[@]}"; do
+			responsive_ips[$n]=$(echo ${ip}$(($RANDOM%256)))
 			n=$[$n+1]
 			if [ $n -ge $iplist ]
 			then
@@ -177,13 +177,13 @@ endipv4(){
  
  	flag=""
 	while true;	do
-		for subnet in "${subnets[@]}"; do
-			if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		for ip in "${responsive_ips[@]}"; do
+			if [ $(echo ${responsive_ips[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
 			then
    				flag=1
 				break
 			else
-				temp[$n]=$(echo ${subnet}$(($RANDOM%256)))
+				responsive_ips[$n]=$(echo ${ip}$(($RANDOM%256)))
 				n=$[$n+1]
 			fi
    		done
@@ -197,7 +197,7 @@ endipv4(){
 
 endipresult(){
 	num_configs=$1
-	echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u > ip.txt
+	echo ${responsive_ips[@]} | sed -e 's/ /\n/g' | sort -u > ip.txt
 	ulimit -n 102400
 	chmod +x warpendpoint
 	./warpendpoint
@@ -424,6 +424,7 @@ menu(){
 	echo "------------------------------------------------------------"
 	echo "1.Automatic scanning and execution (Android / Linux)"
 	echo "2.Import custom IPs with result.csv file (windows)"
+ 	echo ""
 	read -r -p "Please choose an option: " option
 
 	if [ "$option" = "1" ]; then
