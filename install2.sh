@@ -112,7 +112,7 @@ endipv4(){
 	# Initialize an empty array for responsive IPs
  	# echo "------------------------------------------------------------"
   # 	echo "ping ip pools (this might take some time!):"
-	responsive_ips=${subnets[@]} #()
+	# responsive_ips=()
 	
 	# Check ping for each IP
 	# for ip in "${subnets[@]}"; do
@@ -168,8 +168,8 @@ endipv4(){
  	# done
   
 	while true; do
- 		for ip in "${responsive_ips[@]}"; do
-			responsive_ips[$n]=$(echo ${ip}$(($RANDOM%256)))
+ 		for ip in "${subnets[@]}"; do
+			subnets[$n]=$(echo ${ip}$(($RANDOM%256)))
 			n=$[$n+1]
 			if [ $n -ge $iplist ]
 			then
@@ -185,13 +185,13 @@ endipv4(){
  
  	flag=""
 	while true;	do
-		for ip in "${responsive_ips[@]}"; do
-			if [ $(echo ${responsive_ips[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		for ip in "${subnets[@]}"; do
+			if [ $(echo ${subnets[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
 			then
    				flag=1
 				break
 			else
-				responsive_ips[$n]=$(echo ${ip}$(($RANDOM%256)))
+				subnets[$n]=$(echo ${ip}$(($RANDOM%256)))
 				n=$[$n+1]
 			fi
    		done
@@ -205,7 +205,7 @@ endipv4(){
 
 endipresult(){
 	num_configs=$1
-	echo ${responsive_ips[@]} | sed -e 's/ /\n/g' | sort -u > ip.txt
+	echo ${subnets[@]} | sed -e 's/ /\n/g' | sort -u > ip.txt
 	ulimit -n 102400
 	chmod +x warpendpoint
 	./warpendpoint
