@@ -117,10 +117,11 @@ endipv4(){
 	for ip in "${subnets[@]}"; do
 	    if ping -c 1 "${ip}1" &> /dev/null; then
 	        # IP responds to ping
+	 	echo "${GREEN}IP: $ip, OK!${RESET}"
 	        responsive_ips+=("$ip")
 	    else
 	        # IP does not respond to ping
-	        echo "IP: $ip, does not ping and removed."
+	        echo "${RED}IP: $ip, does not ping and removed.${RESET}"
 	    fi
 	done
 
