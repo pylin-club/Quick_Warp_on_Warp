@@ -72,18 +72,18 @@ endipv4(){
 
 		# Netherlands -> 141.101.64.0/18
   		"141.101.65."
-		"141.101.65."
-		"141.101.65."
-		"141.101.65."
+		"141.101.66."
+		"141.101.77."
+		"141.101.78."
   
 		"141.101.97."
-		"141.101.97."
-		"141.101.97."
-		"141.101.97."
+		"141.101.98."
+		"141.101.107."
+		"141.101.108."
   
-		"141.101.127."
-		"141.101.127."
-		"141.101.127."
+		"141.101.116."
+		"141.101.117."
+		"141.101.126."
 		"141.101.127."
 
 
@@ -280,7 +280,7 @@ count_conf=$1
 	      "reserved": ['$w_res'],
 	
 	      "mtu": 1280,
-	      "fake_packets": "1-6"
+	      "fake_packets": "5-10"
 	    },
 	    {
 	      "type": "wireguard",
@@ -298,7 +298,7 @@ count_conf=$1
 	      "reserved": ['$i_w_res'],  
 	
 	      "mtu": 1280,
-	      "fake_packets": "1-6"
+	      "fake_packets": "0-5"
 	    }'
 	
 	    temp_json+="$new_json"
@@ -366,7 +366,7 @@ process_no_result_csv() {
 	      "reserved": ['$w_res'],
 	
 	      "mtu": 1280,
-	      "fake_packets": "1-6"
+	      "fake_packets": "5-10"
 	    },
 	    {
 	      "type": "wireguard",
@@ -384,7 +384,7 @@ process_no_result_csv() {
 	      "reserved": ['$i_w_res'],  
 	
 	      "mtu": 1280,
-	      "fake_packets": "1-6"
+	      "fake_packets": "0-5"
 	    }'
 	
 	    temp_json+="$new_json"
