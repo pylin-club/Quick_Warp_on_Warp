@@ -288,7 +288,7 @@ count_conf=$1
 	      "reserved": ['$w_res'],
 	
 	      "mtu": 1280,
-	      "fake_packets": "10-20"
+	      "fake_packets": "5-10"
 	    },
 	    {
 	      "type": "wireguard",
@@ -374,7 +374,7 @@ process_no_result_csv() {
 	      "reserved": ['$w_res'],
 	
 	      "mtu": 1280,
-	      "fake_packets": "10-20"
+	      "fake_packets": "5-10"
 	    },
 	    {
 	      "type": "wireguard",
