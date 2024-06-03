@@ -208,10 +208,11 @@ process_result_csv() {
 		num_configs=${max_configs}
 	fi
 
+	echo "This step might take some times based on how many configs you ordered:"
+
     # loop over result.csv IPs
 	counter=0
 	for ((i=2; i<=$num_lines; i++)); do
-		# echo "license $((i-1)), captured."
 		
 		# extract each line
 		local line=$(sed -n "${i}p" ./result.csv)
@@ -220,6 +221,7 @@ process_result_csv() {
 		local delay=$(echo "$line" | awk -F',' '{gsub(/ ms/, "", $3); print $3}')
 		if [ "$delay" -lt 1000 ]; then
 			counter=$((counter+1))
+			echo "config $((counter)), created."
 
 			# extract ip:port
 			local endpoint=$(echo "$line" | awk -F',' '{print $1}')
@@ -282,7 +284,6 @@ process_result_csv() {
 		
 			temp_json+="$new_json"
 		
-			# اضافه کردن خط خالی به محتوای متغیر موقت
 			if [ $i -lt $num_lines ]; then
 				temp_json+=","
 			fi
@@ -291,10 +292,10 @@ process_result_csv() {
 
 
     echo "------------------------------------------------------------"
-    echo "We have considered the number of ${counter} clean IPs."
+    echo "We have found the number of ${counter} clean IPs."
     echo ""
 	if [ "$counter" -gt "$num_configs" ]; then
-		echo "Warning: you have requested ${num_configs} configs but only ${counter} configs found."
+		echo "Warning: you have requested ${num_configs} configs but only ${counter} configs created."
 		echo "try using a bigger number for scanning IPs"
 	fi
 
