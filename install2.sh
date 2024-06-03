@@ -433,7 +433,7 @@ menu(){
 	echo "1.Automatic scanning and execution (Android / Linux)"
 	echo "2.Import custom IPs with result.csv file (windows)"
  	echo ""
-	echo "$(uname -m)"
+	echo "11$(uname -m)"
 	read -r -p "Please choose an option: " option
 
 	if [ "$option" = "1" ]; then
