@@ -208,7 +208,7 @@ count_conf=$1
 		# extract DELAY and filter DELAY >= 1000
 		local delay=$(echo "$line" | awk -F',' '{gsub(/ ms/, "", $3); print $3}')
 		if [$delat -lt 1000]; then
-			counter=((counter+1))
+			counter=$((counter+1))
 
 			# extract ip:port
 			local endpoint=$(echo "$line" | awk -F',' '{print $1}')
