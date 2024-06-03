@@ -251,7 +251,6 @@ process_result_csv() {
 			"tag": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
 			"server": "'"$ip"'",
 			"server_port": '"$port"',
-		
 			"local_address": [
 				"172.16.0.2/32",
 				"'"$w_ip"'"
@@ -259,17 +258,14 @@ process_result_csv() {
 			"private_key": "'"$w_pv"'",
 			"peer_public_key": "'"$w_pb"'",
 			"reserved": ['$w_res'],
-		
 			"mtu": 1280,
 			"fake_packets": "5-10"
-			},
-			{
+			}, {
 			"type": "wireguard",
 			"tag": "\ud83c\udfaeGame_'$((i - 1))' | '$value_to_add'",
 			"detour": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
 			"server": "'"$ip"'",
 			"server_port": '"$port"',
-			
 			"local_address": [
 				"172.16.0.2/32",
 				"'"$i_w_ip"'"
@@ -277,16 +273,12 @@ process_result_csv() {
 			"private_key": "'"$i_w_pv"'",
 			"peer_public_key": "'"$i_w_pb"'",
 			"reserved": ['$i_w_res'],  
-		
 			"mtu": 1120,
 			"fake_packets": "5-10"
-			}'
+			},'
 		
 			temp_json+="$new_json"
 		
-			if [ $i -lt $num_lines ]; then
-				temp_json+=","
-			fi
 		fi
 	done
 
@@ -299,7 +291,8 @@ process_result_csv() {
 		echo "try using a bigger number for scanning IPs"
 	fi
 
-		
+	temp_json="${temp_json%,}"
+
 	full_json='
 	{
 		"outbounds": 
