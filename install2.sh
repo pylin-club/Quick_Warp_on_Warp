@@ -168,7 +168,7 @@ endipresult(){
 	echo "${GREEN}successfully create result.csv file${RESET}"
 	echo "${CYAN}Now we're going to process result.csv${RESET}"
 	process_result_csv $num_configs
-	rm -rf ip.txt warpendpoint # result.csv
+	rm -rf ip.txt warpendpoint result.csv
 	exit
 }
 
@@ -189,101 +189,107 @@ count_conf=$1
     echo "------------------------------------------------------------"
     echo "We have considered the number of ${num_lines} IPs."
     echo ""
-	cat ./result.csv
 
 	if [ "$count_conf" -lt "$num_lines" ]; then
-	    num_lines=$count_conf
+		num_lines=$count_conf
 	elif [ "$count_conf" -gt "$num_lines" ]; then
-	    echo "Warning: The number of IPs found is less than the number you want!"
-	    num_lines=$count_conf
+		echo "Warning: The number of IPs found is less than the number you want!"
+		num_lines=$count_conf
 	fi
 
-    # برای هر سطر در result.csv دستورات را اجرا کنید
+    # loop over result.csv IPs
+	counter=0
 	for ((i=2; i<=$num_lines; i++)); do
-		echo "license $((i-1)), captured."
-		# اطلاعات مورد نیاز از هر سطر را دریافت کنید
+		# echo "license $((i-1)), captured."
+		
+		# extract each line
 		local line=$(sed -n "${i}p" ./result.csv)
-		local endpoint=$(echo "$line" | awk -F',' '{print $1}')
-		local ip=$(echo "$endpoint" | awk -F':' '{print $1}')
-		local port=$(echo "$endpoint" | awk -F':' '{print $2}')
 		
-		values=$(get_values)
-		w_ip=$(echo "$values" | cut -d'@' -f1)
-		w_pv=$(echo "$values" | cut -d'@' -f2)
-		w_pb=$(echo "$values" | cut -d'@' -f3)
-		w_res=$(echo "$values" | cut -d'@' -f4)
+		# extract DELAY and filter DELAY >= 1000
+		local delay=$(echo "$line" | awk -F',' '{gsub(/ ms/, "", $3); print $3}')
+		if [$delat -lt 1000]; then
+			counter=((counter+1))
+
+			# extract ip:port
+			local endpoint=$(echo "$line" | awk -F',' '{print $1}')
+			local ip=$(echo "$endpoint" | awk -F':' '{print $1}')
+			local port=$(echo "$endpoint" | awk -F':' '{print $2}')
+			
+			values=$(get_values)
+			w_ip=$(echo "$values" | cut -d'@' -f1)
+			w_pv=$(echo "$values" | cut -d'@' -f2)
+			w_pb=$(echo "$values" | cut -d'@' -f3)
+			w_res=$(echo "$values" | cut -d'@' -f4)
+			
+			i_values=$(get_values)
+			i_w_ip=$(echo "$i_values" | cut -d'@' -f1)
+			i_w_pv=$(echo "$i_values" | cut -d'@' -f2)
+			i_w_pb=$(echo "$i_values" | cut -d'@' -f3)
+			i_w_res=$(echo "$i_values" | cut -d'@' -f4)
+			
+			if [ $((i % 2)) -eq 0 ]; then
+				value_to_add="@pylin_news"
+			else
+				value_to_add="@pylin_gap"
+			fi
+			
+			new_json='{
+			"type": "wireguard",
+			"tag": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
+			"server": "'"$ip"'",
+			"server_port": '"$port"',
 		
-		i_values=$(get_values)
-		i_w_ip=$(echo "$i_values" | cut -d'@' -f1)
-		i_w_pv=$(echo "$i_values" | cut -d'@' -f2)
-		i_w_pb=$(echo "$i_values" | cut -d'@' -f3)
-		i_w_res=$(echo "$i_values" | cut -d'@' -f4)
+			"local_address": [
+				"172.16.0.2/32",
+				"'"$w_ip"'"
+			],
+			"private_key": "'"$w_pv"'",
+			"peer_public_key": "'"$w_pb"'",
+			"reserved": ['$w_res'],
 		
-		# ترکیب رشته و متغیرها در یک متغیر دیگر
+			"mtu": 1280,
+			"fake_packets": "5-10"
+			},
+			{
+			"type": "wireguard",
+			"tag": "\ud83c\udfaeGame_'$((i - 1))' | '$value_to_add'",
+			"detour": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
+			"server": "'"$ip"'",
+			"server_port": '"$port"',
+			
+			"local_address": [
+				"172.16.0.2/32",
+				"'"$i_w_ip"'"
+			],
+			"private_key": "'"$i_w_pv"'",
+			"peer_public_key": "'"$i_w_pb"'",
+			"reserved": ['$i_w_res'],  
 		
-		if [ $((i % 2)) -eq 0 ]; then
-			value_to_add="@pylin_news"
-		else
-			value_to_add="@pylin_gap"
+			"mtu": 1120,
+			"fake_packets": "5-10"
+			}'
+		
+			temp_json+="$new_json"
+		
+			# اضافه کردن خط خالی به محتوای متغیر موقت
+			if [ $i -lt $num_lines ]; then
+				temp_json+=","
+			fi
 		fi
-  		
-		new_json='{
-	      "type": "wireguard",
-	      "tag": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
-	      "server": "'"$ip"'",
-	      "server_port": '"$port"',
-	
-	      "local_address": [
-	        "172.16.0.2/32",
-	        "'"$w_ip"'"
-	      ],
-	      "private_key": "'"$w_pv"'",
-	      "peer_public_key": "'"$w_pb"'",
-	      "reserved": ['$w_res'],
-	
-	      "mtu": 1280,
-	      "fake_packets": "5-10"
-	    },
-	    {
-	      "type": "wireguard",
-	      "tag": "\ud83c\udfaeGame_'$((i - 1))' | '$value_to_add'",
-	      "detour": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
-	      "server": "'"$ip"'",
-	      "server_port": '"$port"',
-	      
-	      "local_address": [
-	          "172.16.0.2/32",
-	          "'"$i_w_ip"'"
-	      ],
-	      "private_key": "'"$i_w_pv"'",
-	      "peer_public_key": "'"$i_w_pb"'",
-	      "reserved": ['$i_w_res'],  
-	
-	      "mtu": 1120,
-	      "fake_packets": "5-10"
-	    }'
-	
-	    temp_json+="$new_json"
-	
-		# اضافه کردن خط خالی به محتوای متغیر موقت
-		if [ $i -lt $num_lines ]; then
-		    temp_json+=","
-		fi
-    done
-	
+	done
+		
 	full_json='
 	{
-	  "outbounds": 
-	  [
-	    '"$temp_json"'
-	  ]
+		"outbounds": 
+			[
+				'"$temp_json"'
+			]
 	}
 	'
 	echo "$full_json" > warp.json
-	echo ""
-	echo "${GREEN}Upload Files to Get Link${RESET}"
+	echo "number of final IPs: ${counter}"
 	echo "------------------------------------------------------------"
-	echo "Your link:"
+	echo "${GREEN}Your link:${RESET}"
 	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1#'
 	echo "------------------------------------------------------------"
 	echo ""
