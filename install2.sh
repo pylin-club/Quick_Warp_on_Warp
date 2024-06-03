@@ -29,7 +29,7 @@ esac
 cfwarpIP(){
 	echo "download warp endpoint file base on your CPU architecture"
 	if [[ -n $cpu ]]; then
-		curl -L -o warpendpoint -# --retry 2 https://github.com/ViRb3/wgcf/releases/download/v2.2.22/wgcf_2.2.22_linux_arm64
+		curl -L -o warpendpoint -# --retry 2 https://raw.githubusercontent.com/pylin-club/Quick_Warp_on_Warp/main/cpu/$cpu
 	fi
 }
 
@@ -433,7 +433,6 @@ menu(){
 	echo "1.Automatic scanning and execution (Android / Linux)"
 	echo "2.Import custom IPs with result.csv file (windows)"
  	echo ""
-	echo "11$(uname -m)"
 	read -r -p "Please choose an option: " option
 
 	if [ "$option" = "1" ]; then
