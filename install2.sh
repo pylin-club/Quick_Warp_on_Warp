@@ -103,7 +103,7 @@ min_possible_ips=100
 max_possible_ips=$((total_ips / 8))
 
 min_configs=2
-max_configs=50
+max_configs=25
 
 
 cfwarpIP(){
@@ -212,7 +212,7 @@ process_result_csv() {
 
     # loop over result.csv IPs
 	counter=0
-	for ((i=2; i<=$num_lines; i++)); do
+	for ((i=2; i<=$num_configs; i++)); do
 		
 		# extract each line
 		local line=$(sed -n "${i}p" ./result.csv)
