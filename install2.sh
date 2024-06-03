@@ -126,95 +126,49 @@ endipv4(){
 	#     fi
 	# done
 
- #  	echo "Done! now let's scan $iplist ips"
- #    	echo "------------------------------------------------------------"
-     
-	n=0
- 	flag=""
-	# for counter in $(seq 0 255); do
-		# temp[$n]=$(echo 162.159.192.$(counter))
-  # 		n=$[$n+1]
-  #   		temp[$n]=$(echo 162.159.193.$(counter))
-  #     		n=$[$n+1]
-		# temp[$n]=$(echo 162.159.195.$(counter))
-  # 		n=$[$n+1]
-  # 		temp[$n]=$(echo 188.114.96.$(counter))
-  #   		n=$[$n+1]
-  #     		temp[$n]=$(echo 188.114.97.$(counter))
-		# n=$[$n+1]
-  #   		temp[$n]=$(echo 188.114.98.$(counter))
-  #     		n=$[$n+1]
-  #     		temp[$n]=$(echo 188.114.99.$(counter))
-		# n=$[$n+1]
+	#  	echo "Done! now let's scan $iplist ips"
+	#    	echo "------------------------------------------------------------"
+    
+	declare -ag distinct_ips
 
-		# temp[$n]=$(echo 190.93.241.$counter)
-  # 		n=$[$n+1]
-  #   		temp[$n]=$(echo 190.93.242.$counter)
-  #     		n=$[$n+1]
-		# temp[$n]=$(echo 190.93.243.$counter)
-  # 		n=$[$n+1]
-  # 		temp[$n]=$(echo 197.234.241.$counter)
-  #   		n=$[$n+1]
-  #     		temp[$n]=$(echo 197.234.242.$counter)
-		# n=$[$n+1]
-  #   		temp[$n]=$(echo 197.234.243.$counter)
-  #     		n=$[$n+1]
-  #     		temp[$n]=$(echo 131.0.73.0.$counter)
-		# n=$[$n+1]
-  #       	temp[$n]=$(echo 131.0.74.0.$counter)
-		# n=$[$n+1]
-  #       	temp[$n]=$(echo 131.0.75.0.$counter)
-		# n=$[$n+1]
- 	# done
-  
-	while true; do
- 		for ip in "${subnets[@]}"; do
-			subnets[$n]=$(echo ${ip}$(($RANDOM%256)))
-			n=$[$n+1]
-			if [ $n -ge $iplist ]
-			then
-   				flag=1
-				break
-			fi
-   		done
-	 
-   		if [ -n "$flag" ]; then
-	 		break
-		fi
-	done
- 
- 	flag=""
-	while true;	do
+	while [[ ${#distinct_ips[@]} -lt $iplist ]]; do
+
 		for ip in "${subnets[@]}"; do
-			if [ $(echo ${subnets[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
-			then
-   				flag=1
+
+			if [[ ${#distinct_ips[@]} == $iplist ]]; then
 				break
-			else
-				subnets[$n]=$(echo ${ip}$(($RANDOM%256)))
-				n=$[$n+1]
 			fi
-   		done
-	 
-	 	if [ -n "$flag" ]; then
-	 		break
-		fi
+			
+			random_ip=$(echo ${ip}$((RANDOM % 256)))
+			
+			if [[ ! "${distinct_ips[@]}" =~ "$random_ip" ]]; then
+				distinct_ips+=("$random_ip")
+			fi
+
+		done
 	done
+
 }
 
 
 endipresult(){
 	num_configs=$1
-	echo ${subnets[@]} | sed -e 's/ /\n/g' | sort -u > ip.txt
+
+	# write random distinct IPs into a txt file
+	for value in "${distinct_ips[@]}"; do
+		echo "$value" >> "ip.txt"
+	done
+
 	ulimit -n 102400
 	chmod +x warpendpoint
 	./warpendpoint
+
 	echo "------------------------------------------------------------"
 	echo "${GREEN}successfully generated ipv4 endip list${RESET}"
 	echo "${GREEN}successfully create result.csv file${RESET}"
 	echo "${CYAN}Now we're going to process result.csv${RESET}"
 	process_result_csv $num_configs
-	rm -rf ip.txt warpendpoint result.csv
+	rm -rf ip.txt warpendpoint # result.csv
 	exit
 }
 
@@ -224,7 +178,6 @@ get_values() {
     local private_key=$(echo "$api_output" | grep -oE '"private_key":"[0-9a-zA-Z\/+]+=+"' | sed 's/"private_key":"//; s/"//')
     local public_key=$(echo "$api_output" | grep -oE '"peer_public_key":"[0-9a-zA-Z\/+]+=+"' | sed 's/"peer_public_key":"//; s/"//')
     local reserved=$(echo "$api_output" | grep -oE '"reserved":\[[0-9]+(,[0-9]+){2}\]' | sed 's/"reserved"://; s/\[//; s/\]//')
-
     echo "$ipv6@$private_key@$public_key@$reserved"
 }
 
@@ -236,6 +189,7 @@ count_conf=$1
     echo "------------------------------------------------------------"
     echo "We have considered the number of ${num_lines} IPs."
     echo ""
+	cat ./result.csv
 
 	if [ "$count_conf" -lt "$num_lines" ]; then
 	    num_lines=$count_conf
