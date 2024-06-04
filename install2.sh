@@ -310,9 +310,6 @@ process_result_csv() {
 	num_configs=$1
 	use_default_ip_port=$2
 
-	# Create an array to hold the config dictionaries
-	declare -a outbounds=()
-
 	# Default IP & PORT
 	local ip="engage.cloudflareclient.com"
 	local port=2408
@@ -329,10 +326,6 @@ process_result_csv() {
     # loop over result.csv IPs
 	counter=0
 	for ((i=2; i<=$((num_configs + 1)); i++)); do
-
-		# create an associative array
-		declare -A config_dict1
-		declare -A config_dict2
 
 		if [ "$use_default_ip_port" -eq 1 ]; then
 			# extract each line
@@ -386,62 +379,33 @@ process_result_csv() {
 			value_to_add="@pylin_gap"
 		fi
 
-		config_dict1["type"]="wireguard"
-		config_dict1["tag"]="\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'"
-		config_dict1["server"]="$ip"
-		config_dict1["server_port"]=$port
-		config_dict1["local_address"]='["172.16.0.2/32","'"$w_ip"'"]'
-		config_dict1["private_key"]="$w_pv"
-		config_dict1["peer_public_key"]="$w_pb"
-		config_dict1["reserved"]="['$w_res']"
-		config_dict1["mtu"]=1280
-		config_dict1["fake_packets"]="5-10"
 
-		config_dict2["type"]="wireguard"
-		config_dict2["tag"]="\ud83c\udfaeGame_'$((i - 1))' | '$value_to_add'"
-		config_dict2["detour"]="\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'"
-		config_dict2["server"]="$ip"
-		config_dict2["server_port"]=$port
-		config_dict2["local_address"]='["172.16.0.2/32","'"$i_w_ip"'"]'
-		config_dict2["private_key"]="$i_w_pv"
-		config_dict2["peer_public_key"]="$i_w_pb"
-		config_dict2["reserved"]="['$i_w_res']"
-		config_dict2["mtu"]=1120
-		config_dict2["fake_packets"]="5-10"
-
-		# new_json='{
-		# "type": "wireguard",
-		# "tag": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
-		# "server": "'"$ip"'",
-		# "server_port": '"$port"',
-		# "local_address": [
-		# 	"172.16.0.2/32",
-		# 	"'"$w_ip"'"
-		# ],
-		# "private_key": "'"$w_pv"'",
-		# "peer_public_key": "'"$w_pb"'",
-		# "reserved": ['$w_res'],
-		# "mtu": 1280,
-		# "fake_packets": "5-10"
-		# }, {
-		# "type": "wireguard",
-		# "tag": "\ud83c\udfaeGame_'$((i - 1))' | '$value_to_add'",
-		# "detour": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
-		# "server": "'"$ip"'",
-		# "server_port": '"$port"',
-		# "local_address": [
-		# 	"172.16.0.2/32",
-		# 	"'"$i_w_ip"'"
-		# ],
-		# "private_key": "'"$i_w_pv"'",
-		# "peer_public_key": "'"$i_w_pb"'",
-		# "reserved": ['$i_w_res'],  
-		# "mtu": 1120,
-		# "fake_packets": "5-10"
-		# },'
+		new_json=\
+'{
+"type": "wireguard",
+"tag": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
+"server": "'"$ip"'",
+"server_port": '"$port"',
+"local_address": ["172.16.0.2/32","'"$w_ip"'"],
+"private_key": "'"$w_pv"'",
+"peer_public_key": "'"$w_pb"'",
+"reserved": ['$w_res'],
+"mtu": 1280,
+"fake_packets": "0-5"
+},{
+"type": "wireguard",
+"tag": "\ud83c\udfaeGame_'$((i - 1))' | '$value_to_add'",
+"detour": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
+"server": "'"$ip"'",
+"server_port": '"$port"',
+"local_address": ["172.16.0.2/32","'"$i_w_ip"'"],
+"private_key": "'"$i_w_pv"'",
+"peer_public_key": "'"$i_w_pb"'",
+"reserved": ['$i_w_res'],  
+"mtu": 1120
+},'
 	
-		outbounds+=("$config_dict1")
-		outbounds+=("$config_dict2")
+		config_json+="$new_json"
 	done
 
 
@@ -453,35 +417,16 @@ process_result_csv() {
 		echo "try using a bigger number for scanning IPs"
 	fi
 
+	# remove the last trailing comma
+	config_json="${config_json%,}"
 
-# construct the JSON-like string
-json_output="{\"outbounds\":["
-for outbound in "${outbounds[@]}"; do
-    json_output+="{"
-    for key in "${!outbound[@]}"; do
-        json_output+="\"$key\":\"${outbound[$key]}\","
-    done
-    # remove the trailing comma
-    json_output="${json_output%,}"
-    json_output+="},"
-done
-# remove the trailing comma
-json_output="${json_output%,}"
-
-json_output+="]}"
-
-
-	# # remove the last trailing comma
-	# config_json="${config_json%,}"
-
-	# full_json='
-	# {
-	# 	"outbounds": 
-	# 		[
-	# 			'"$config_json"'
-	# 		]
-	# }
-	# '
+	full_json=\
+'{
+"outbounds": 
+	[
+		'"$config_json"'
+	]
+}'
 	echo "$full_json" > warp.json
 	echo "------------------------------------------------------------"
 	echo "${GREEN}Your link:${RESET}"
