@@ -390,7 +390,7 @@ process_result_csv() {
 		config_dict1["tag"]="\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'"
 		config_dict1["server"]="$ip"
 		config_dict1["server_port"]=$port
-		config_dict1["local_address"]= '["172.16.0.2/32","'"$w_ip"'"]'
+		config_dict1["local_address"]='["172.16.0.2/32","'"$w_ip"'"]'
 		config_dict1["private_key"]="$w_pv"
 		config_dict1["peer_public_key"]="$w_pb"
 		config_dict1["reserved"]="['$w_res']"
@@ -402,7 +402,7 @@ process_result_csv() {
 		config_dict2["detour"]="\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'"
 		config_dict2["server"]="$ip"
 		config_dict2["server_port"]=$port
-		config_dict2["local_address"]= '["172.16.0.2/32","'"$i_w_ip"'"]'
+		config_dict2["local_address"]='["172.16.0.2/32","'"$i_w_ip"'"]'
 		config_dict2["private_key"]="$i_w_pv"
 		config_dict2["peer_public_key"]="$i_w_pb"
 		config_dict2["reserved"]="['$i_w_res']"
