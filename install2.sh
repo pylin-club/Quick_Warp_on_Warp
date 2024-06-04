@@ -380,30 +380,29 @@ process_result_csv() {
 		fi
 
 
-		new_json=\
-'{
-"type": "wireguard",
-"tag": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
-"server": "'"$ip"'",
-"server_port": '"$port"',
-"local_address": ["172.16.0.2/32","'"$w_ip"'"],
-"private_key": "'"$w_pv"'",
-"peer_public_key": "'"$w_pb"'",
-"reserved": ['$w_res'],
-"mtu": 1280,
-"fake_packets": "0-5"
-},{
-"type": "wireguard",
-"tag": "\ud83c\udfaeGame_'$((i - 1))' | '$value_to_add'",
-"detour": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
-"server": "'"$ip"'",
-"server_port": '"$port"',
-"local_address": ["172.16.0.2/32","'"$i_w_ip"'"],
-"private_key": "'"$i_w_pv"'",
-"peer_public_key": "'"$i_w_pb"'",
-"reserved": ['$i_w_res'],  
-"mtu": 1120
-},'
+		new_json='{
+		"type": "wireguard",
+		"tag": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
+		"server": "'"$ip"'",
+		"server_port": '"$port"',
+		"local_address": ["172.16.0.2/32","'"$w_ip"'"],
+		"private_key": "'"$w_pv"'",
+		"peer_public_key": "'"$w_pb"'",
+		"reserved": ['$w_res'],
+		"mtu": 1280,
+		"fake_packets": "0-5"
+		},{
+		"type": "wireguard",
+		"tag": "\ud83c\udfaeGame_'$((i - 1))' | '$value_to_add'",
+		"detour": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
+		"server": "'"$ip"'",
+		"server_port": '"$port"',
+		"local_address": ["172.16.0.2/32","'"$i_w_ip"'"],
+		"private_key": "'"$i_w_pv"'",
+		"peer_public_key": "'"$i_w_pb"'",
+		"reserved": ['$i_w_res'],  
+		"mtu": 1120
+		},'
 	
 		config_json+="$new_json"
 	done
