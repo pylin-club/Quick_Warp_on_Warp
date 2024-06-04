@@ -313,7 +313,7 @@ endipresult(){
 
 	process_result_csv $num_configs 1
 
-	rm -rf ip.txt warpendpoint # result.csv
+	rm -rf ip.txt warpendpoint result.csv warp.json install2.sh
 	exit
 }
 
@@ -458,7 +458,7 @@ process_result_csv() {
 	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1#'
 	echo "------------------------------------------------------------"
 	echo ""
-	mv warp.json warp_$(date +"%Y%m%d_%H%M%S").json
+	# mv warp.json warp_$(date +"%Y%m%d_%H%M%S").json
 }
 
 menu(){
