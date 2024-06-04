@@ -225,9 +225,6 @@ subnets=(
 
 	# Russia
 	# "172.69.50."
-
-
-
 )
 
 total_ips=$(( ${#subnets[@]} * 256 ))
@@ -314,7 +311,7 @@ endipresult(){
 	echo "${GREEN}successfully create result.csv file${RESET}"
 	echo "${CYAN}Now we're going to process result.csv${RESET}"
 
-	process_result_csv $num_configs
+	process_result_csv $num_configs 1
 
 	rm -rf ip.txt warpendpoint result.csv
 	exit
@@ -331,7 +328,12 @@ get_values() {
 
 process_result_csv() {
 	num_configs=$1
+	use_default_ip_port=$2
 	num_lines=$(wc -l < ./result.csv)
+
+	# Default IP & PORT
+	local ip="engage.cloudflareclient.com"
+	local port=2408
 
 	# check the range of IPs
 	if [[ ${num_configs} -lt ${min_configs} ]]; then
@@ -345,21 +347,39 @@ process_result_csv() {
     # loop over result.csv IPs
 	counter=0
 	for ((i=2; i<=$num_configs; i++)); do
-		
-		# extract each line
-		local line=$(sed -n "${i}p" ./result.csv)
-		
-		# extract DELAY and filter DELAY >= 1000
-		local delay=$(echo "$line" | awk -F',' '{gsub(/ ms/, "", $3); print $3}')
-		if [ "$delay" -lt 1000 ]; then
-			counter=$((counter+1))
-			echo "config $((counter)), created."
 
-			# extract ip:port
-			local endpoint=$(echo "$line" | awk -F',' '{print $1}')
-			local ip=$(echo "$endpoint" | awk -F':' '{print $1}')
-			local port=$(echo "$endpoint" | awk -F':' '{print $2}')
+		if [ "$use_default_ip_port" -eq 1 ]; then
+			# extract each line
+			local line=$(sed -n "${i}p" ./result.csv)
 			
+			# extract DELAY and filter DELAY >= 1000
+			local delay=$(echo "$line" | awk -F',' '{gsub(/ ms/, "", $3); print $3}')
+			if [ "$delay" -lt 1000 ]; then
+				counter=$((counter+1))
+				echo "config $((counter)), created."
+				
+				# extract ip:port
+				local endpoint=$(echo "$line" | awk -F',' '{print $1}')
+				local ip=$(echo "$endpoint" | awk -F':' '{print $1}')
+				local port=$(echo "$endpoint" | awk -F':' '{print $2}')
+				
+				values=$(get_values)
+				w_ip=$(echo "$values" | cut -d'@' -f1)
+				w_pv=$(echo "$values" | cut -d'@' -f2)
+				w_pb=$(echo "$values" | cut -d'@' -f3)
+				w_res=$(echo "$values" | cut -d'@' -f4)
+				
+				i_values=$(get_values)
+				i_w_ip=$(echo "$i_values" | cut -d'@' -f1)
+				i_w_pv=$(echo "$i_values" | cut -d'@' -f2)
+				i_w_pb=$(echo "$i_values" | cut -d'@' -f3)
+				i_w_res=$(echo "$i_values" | cut -d'@' -f4)
+			
+			else
+				continue
+			fi
+
+		else
 			values=$(get_values)
 			w_ip=$(echo "$values" | cut -d'@' -f1)
 			w_pv=$(echo "$values" | cut -d'@' -f2)
@@ -371,47 +391,47 @@ process_result_csv() {
 			i_w_pv=$(echo "$i_values" | cut -d'@' -f2)
 			i_w_pb=$(echo "$i_values" | cut -d'@' -f3)
 			i_w_res=$(echo "$i_values" | cut -d'@' -f4)
-			
-			if [ $((i % 2)) -eq 0 ]; then
-				value_to_add="@pylin_news"
-			else
-				value_to_add="@pylin_gap"
-			fi
-			
-			new_json='{
-			"type": "wireguard",
-			"tag": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
-			"server": "'"$ip"'",
-			"server_port": '"$port"',
-			"local_address": [
-				"172.16.0.2/32",
-				"'"$w_ip"'"
-			],
-			"private_key": "'"$w_pv"'",
-			"peer_public_key": "'"$w_pb"'",
-			"reserved": ['$w_res'],
-			"mtu": 1280,
-			"fake_packets": "5-10"
-			}, {
-			"type": "wireguard",
-			"tag": "\ud83c\udfaeGame_'$((i - 1))' | '$value_to_add'",
-			"detour": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
-			"server": "'"$ip"'",
-			"server_port": '"$port"',
-			"local_address": [
-				"172.16.0.2/32",
-				"'"$i_w_ip"'"
-			],
-			"private_key": "'"$i_w_pv"'",
-			"peer_public_key": "'"$i_w_pb"'",
-			"reserved": ['$i_w_res'],  
-			"mtu": 1120,
-			"fake_packets": "5-10"
-			},'
-		
-			temp_json+="$new_json"
-		
+
 		fi
+			
+		if [ $((i % 2)) -eq 0 ]; then
+			value_to_add="@pylin_news"
+		else
+			value_to_add="@pylin_gap"
+		fi
+		
+		new_json='{
+		"type": "wireguard",
+		"tag": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
+		"server": "'"$ip"'",
+		"server_port": '"$port"',
+		"local_address": [
+			"172.16.0.2/32",
+			"'"$w_ip"'"
+		],
+		"private_key": "'"$w_pv"'",
+		"peer_public_key": "'"$w_pb"'",
+		"reserved": ['$w_res'],
+		"mtu": 1280,
+		"fake_packets": "5-10"
+		}, {
+		"type": "wireguard",
+		"tag": "\ud83c\udfaeGame_'$((i - 1))' | '$value_to_add'",
+		"detour": "\ud83c\udf10Web_'$((i - 1))' | '$value_to_add'",
+		"server": "'"$ip"'",
+		"server_port": '"$port"',
+		"local_address": [
+			"172.16.0.2/32",
+			"'"$i_w_ip"'"
+		],
+		"private_key": "'"$i_w_pv"'",
+		"peer_public_key": "'"$i_w_pb"'",
+		"reserved": ['$i_w_res'],  
+		"mtu": 1120,
+		"fake_packets": "5-10"
+		},'
+	
+		temp_json+="$new_json"
 	done
 
 
@@ -443,10 +463,6 @@ process_result_csv() {
 	mv warp.json warp_$(date +"%Y%m%d_%H%M%S").json
 }
 
-process_no_result_csv() {
-	a=10
-}
-
 menu(){
 	clear
 	echo "---------------Credits-----------------------------"
@@ -469,11 +485,11 @@ menu(){
 			endipv4 $number_of_ips
 			endipresult $number_of_configs
 		else
-			process_no_result_csv $number_of_configs
+			process_result_csv $number_of_configs 0
 		fi
 	elif [ "$option" = "2" ]; then
 		read -rep $"Number of configurations(e.g. 10): " number_of_configs
-		process_result_csv $number_of_configs
+		process_result_csv $number_of_configs 1
 	else
 		echo "Invalid option"
 	fi
