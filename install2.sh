@@ -329,7 +329,6 @@ get_values() {
 process_result_csv() {
 	num_configs=$1
 	use_default_ip_port=$2
-	num_lines=$(wc -l < ./result.csv)
 
 	# Default IP & PORT
 	local ip="engage.cloudflareclient.com"
@@ -346,7 +345,7 @@ process_result_csv() {
 
     # loop over result.csv IPs
 	counter=0
-	for ((i=2; i<=$num_configs; i++)); do
+	for ((i=2; i<=$((num_configs + 1)); i++)); do
 
 		if [ "$use_default_ip_port" -eq 1 ]; then
 			# extract each line
@@ -463,15 +462,15 @@ process_result_csv() {
 }
 
 menu(){
-	# clear
+	clear
 	echo "---------------Credits-----------------------------"
 	echo ""
 	echo "Yonggekkk  ：github.com/yonggekkk"
 	echo "Elfina Tech  : github.com/Elfiinaa"
 	echo "Elfina Tech(YT)  : youtube.com/@ElfinaTech"
 	echo "------------------------------------------------------------"
-	echo "1.Automatic scanning and execution (Android / Linux)"
-	echo "2.Import custom IPs with result.csv file (windows)"
+	echo "1.Automatic IP scanning (Android / Linux)"
+	echo "2.Import custom IPs with result.csv (windows)"
 	echo ""
 	read -r -p "Please choose an option: " option
 
