@@ -313,7 +313,7 @@ endipresult(){
 
 	process_result_csv $num_configs 1
 
-	rm -rf ip.txt warpendpoint result.csv
+	rm -rf ip.txt warpendpoint # result.csv
 	exit
 }
 
