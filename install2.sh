@@ -342,7 +342,7 @@ process_result_csv() {
 		num_configs=${max_configs}
 	fi
 
-	echo "This step might take some times based on how many configs you ordered:"
+	echo "This step might take some time based on how many configs you ordered:"
 
     # loop over result.csv IPs
 	counter=0
@@ -436,7 +436,7 @@ process_result_csv() {
 
 
     echo "------------------------------------------------------------"
-    echo "We have found the number of ${counter} clean IPs."
+    echo "We have found the number of ${counter} clean alive IPs."
     echo ""
 	if [ "$counter" -gt "$num_configs" ]; then
 		echo "Warning: you have requested ${num_configs} configs but only ${counter} configs created."
@@ -454,7 +454,6 @@ process_result_csv() {
 	}
 	'
 	echo "$full_json" > warp.json
-	echo "number of final IPs: ${counter}"
 	echo "------------------------------------------------------------"
 	echo "${GREEN}Your link:${RESET}"
 	curl https://bashupload.com/ -T warp.json | sed -e 's#wget#Your Link#' -e 's#https://bashupload.com/\(.*\)#https://bashupload.com/\1#'
