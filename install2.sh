@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GREEN= $(tput setaf 2)
+GREEN=$(tput setaf 2)
 YELLOW=$(tput setaf 3)
 BLUE=$(tput setaf 4)
 CYAN=$(tput setaf 6)
@@ -464,7 +464,7 @@ process_result_csv() {
 }
 
 menu(){
-	clear
+	# clear
 	echo "---------------Credits-----------------------------"
 	echo ""
 	echo "Yonggekkk  ：github.com/yonggekkk"
